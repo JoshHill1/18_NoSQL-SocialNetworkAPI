@@ -15,9 +15,9 @@ async function seedDatabase() {
     }
     await Thought.insertMany(thoughtData);
 
-    console.log("Database seeded successfully");
+    console.log("Db seeded successfully");
   } catch (error) {
-    console.error("Error seeding database:", error);
+    console.error("Error seeding:", error);
   } finally {
     connection.close();
   }

@@ -1,4 +1,4 @@
-const { User, Thought } = require("../models");
+const { User } = require("../models");
 
 module.exports = {
   async getUsers(req, res) {
@@ -24,7 +24,7 @@ module.exports = {
     }
   },
 
-  // POST to create new User
+  // POST - To create new User
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
@@ -34,7 +34,7 @@ module.exports = {
     }
   },
 
-  // PUT to update User by id
+  // PUT - To update User by id
   async updateUser(req, res) {
     try {
       const updatedUser = await User.findOneAndUpdate(
@@ -52,7 +52,7 @@ module.exports = {
     }
   },
 
-  // DELETE to remove user by its _id
+  // DELETE - Remove user by id
   async deleteUser(req, res) {
     try {
       const deletedUser = await User.findOneAndDelete({
@@ -67,12 +67,11 @@ module.exports = {
     }
   },
 
-  // POST to add a new friend to a user's friend list
+  // POST - Add new friend to a user's friend list
   async addFriend(req, res) {
     try {
       const { userId, friendId } = req.params;
 
-      // Checks if user and friend exists
       const user = await User.findById(userId);
       const friend = await User.findById(friendId);
 
@@ -80,12 +79,10 @@ module.exports = {
         return res.status(404).json({ message: "User or friend not found" });
       }
 
-      // Checks if friend is already friends with user
       if (user.friends.includes(friendId)) {
         return res.status(400).json({ message: "Friend already added" });
       }
 
-      // Adds friend to user's friends list
       user.friends.push(friendId);
       await user.save();
 
@@ -95,26 +92,23 @@ module.exports = {
     }
   },
 
-  // DELETE removes friend from user's friends list
+  // DELETE - Removes friend from user's friends list
   async removeFriend(req, res) {
     try {
       const { userId, friendId } = req.params;
 
-      // Checks if the user exists
       const user = await User.findById(userId);
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Checks if the friend is in user's friends list
       if (!user.friends.includes(friendId)) {
         return res
           .status(400)
           .json({ message: "Friend not found in the list" });
       }
 
-      // Removes the friend from user's friends list
       user.friends.pull(friendId);
       await user.save();
 
